@@ -34,4 +34,8 @@ COPY ./nginx.conf /etc/nginx/conf.d/default.conf
 #Expose the port 8080 to instruct Docker to map the port to the host machine to allow access to the web server from the host machine
 EXPOSE 8080
 #Start the nginx server using global directives and the daemon off flag
+#CMD instructs Docker to run the command when the container is started
+#nginx starts the server
+#-g instructs nginx to run the command in the global context
+#daemon off; tells nginx to run in the foreground
 CMD ["nginx", "-g", "daemon off;"]
