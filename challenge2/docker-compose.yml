@@ -1,0 +1,36 @@
+#Seecify the version of docker-compose (3 in this case)
+version: '3'
+#Define the services that make up the app
+services:
+
+#Define the web service (node:14 image)
+  web:
+    image: node:14
+    #Mount the current directory on the host to /usr/src/app inside the container
+    volumes:
+      - .:/usr/src/app
+    #Set the working directory for the container
+    working_dir: /usr/src/app
+    #Run the command npm install && node server.js
+    command: bash -c "npm install && node server.js"
+    #Expose the port 8080
+    environment:
+    #Set the PORT environment variable to 8080 for the Node.js app to use
+      - PORT=8080
+      #Inform Docker that this app listens on port 8080 at runtime
+    expose:
+      - 8080
+
+#Second service is the nginx service to act as reverse proxy
+#A reverse proxy is a server that sits between clients and backend servers
+  nginx:
+    #Use the latest official Nginx image
+    image: nginx:latest
+    #Mount nginx.conf file to NGINX configuration file in container
+    #This will overwrite the default Nginx configuration
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    #Map the port 8080 on the host to the port 80 on the container
+    #Makes app accessible at http://localhost:8080
+    ports:
+      - "8080:80"
